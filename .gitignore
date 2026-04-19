@@ -9,5 +9,6 @@ chat_history/
 dist/
 node_modules/
 playwright/.auth/
+playwright/screenshots/
 playwright-report/
 test-results/
