@@ -15,14 +15,17 @@ const requiredEnvKeys = [
 
 export type AuthEnv = Record<(typeof requiredEnvKeys)[number], string>;
 
+export const authStatusText = "認証済み: パスワード + TOTPを通過しました。";
+
+export const getMissingEnvKeys = (values: Partial<AuthEnv>): string[] =>
+  requiredEnvKeys.filter((key) => (values[key] ?? "").length === 0);
+
 export const readEnv = (): AuthEnv => {
   const values = Object.fromEntries(
     requiredEnvKeys.map((key) => [key, process.env[key] ?? ""])
   ) as AuthEnv;
 
-  const missing = Object.entries(values)
-    .filter(([, value]) => value.length === 0)
-    .map(([key]) => key);
+  const missing = getMissingEnvKeys(values);
 
   if (missing.length > 0) {
     throw new Error(`Missing required env vars: ${missing.join(", ")}`);
@@ -39,6 +42,12 @@ export const seedLoginConfig = async (page: Page, env: AuthEnv) => {
     },
     { domain: env.COGNITO_DOMAIN, clientId: env.COGNITO_CLIENT_ID }
   );
+};
+
+export const openProtectedPage = async (page: Page, env: AuthEnv): Promise<void> => {
+  await page.goto(env.BASE_URL, { waitUntil: "domcontentloaded" });
+  await seedLoginConfig(page, env);
+  await page.reload({ waitUntil: "domcontentloaded" });
 };
 
 const firstVisible = async (candidates: Locator[]): Promise<Locator> => {

@@ -7,7 +7,7 @@
     "build": "tsc -p tsconfig.json",
     "lint": "eslint . --ext .ts",
     "test": "npm run test:unit",
-    "test:unit": "tsx --test test/totp-playwright-stack.test.ts",
+    "test:unit": "tsx --test test/*.test.ts",
     "test:e2e": "playwright test --project e2e",
     "test:e2e:headed": "playwright test --project e2e --headed",
     "test:auth": "playwright test --project setup",

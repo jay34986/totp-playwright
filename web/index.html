@@ -77,8 +77,8 @@
       </p>
 
       <div class="config">
-        <p>以下の値をブラウザの localStorage に設定してください。</p>
-        <p><code>COGNITO_DOMAIN</code> / <code>COGNITO_CLIENT_ID</code> / <code>AWS_REGION</code></p>
+        <p>以下の 2 つの値をブラウザの localStorage に設定してください。</p>
+        <p><code>COGNITO_DOMAIN</code> / <code>COGNITO_CLIENT_ID</code></p>
       </div>
 
       <button id="loginBtn">Cognitoでログイン</button>
@@ -91,41 +91,75 @@
     </main>
 
     <script>
-      const params = new URLSearchParams(location.hash.replace("#", ""));
-      const tokenFromHash = params.get("id_token");
+      const storageKeys = Object.freeze({
+        cognitoDomain: "COGNITO_DOMAIN",
+        cognitoClientId: "COGNITO_CLIENT_ID",
+        idToken: "ID_TOKEN"
+      });
 
-      if (tokenFromHash) {
-        localStorage.setItem("ID_TOKEN", tokenFromHash);
-        history.replaceState({}, "", "/");
-      }
+      const elements = {
+        loginButton: document.getElementById("loginBtn"),
+        logoutButton: document.getElementById("logoutBtn"),
+        secretContent: document.getElementById("secretContent")
+      };
 
-      const idToken = localStorage.getItem("ID_TOKEN");
-      if (idToken) {
-        document.getElementById("secretContent").style.display = "block";
-      }
+      const setAuthenticatedState = (isAuthenticated) => {
+        elements.secretContent.style.display = isAuthenticated ? "block" : "none";
+      };
 
-      document.getElementById("loginBtn").addEventListener("click", () => {
-        const cognitoDomain = localStorage.getItem("COGNITO_DOMAIN");
-        const clientId = localStorage.getItem("COGNITO_CLIENT_ID");
+      const persistIdTokenFromHash = () => {
+        const params = new URLSearchParams(window.location.hash.replace("#", ""));
+        const tokenFromHash = params.get("id_token");
 
-        if (!cognitoDomain || !clientId) {
-          alert("先にlocalStorageへ COGNITO_DOMAIN と COGNITO_CLIENT_ID を設定してください。");
+        if (!tokenFromHash) {
           return;
         }
 
-        const redirectUri = `${window.location.origin}/`;
+        localStorage.setItem(storageKeys.idToken, tokenFromHash);
+
+        const sanitizedUrl = new URL(window.location.href);
+        sanitizedUrl.hash = "";
+        history.replaceState({}, document.title, `${sanitizedUrl.pathname}${sanitizedUrl.search}`);
+      };
+
+      const readLoginConfig = () => {
+        const cognitoDomain = localStorage.getItem(storageKeys.cognitoDomain);
+        const clientId = localStorage.getItem(storageKeys.cognitoClientId);
+
+        if (!cognitoDomain || !clientId) {
+          alert("先にlocalStorageへ COGNITO_DOMAIN と COGNITO_CLIENT_ID を設定してください。");
+          return null;
+        }
+
+        return { cognitoDomain, clientId };
+      };
+
+      const buildLoginUrl = ({ cognitoDomain, clientId }) => {
+        const redirectUri = `${window.location.origin}${window.location.pathname}`;
         const loginUrl = new URL(`${cognitoDomain}/login`);
         loginUrl.searchParams.set("response_type", "token");
         loginUrl.searchParams.set("client_id", clientId);
         loginUrl.searchParams.set("redirect_uri", redirectUri);
         loginUrl.searchParams.set("scope", "openid email profile");
+        return loginUrl;
+      };
 
-        window.location.assign(loginUrl.toString());
+      persistIdTokenFromHash();
+      setAuthenticatedState(Boolean(localStorage.getItem(storageKeys.idToken)));
+
+      elements.loginButton.addEventListener("click", () => {
+        const loginConfig = readLoginConfig();
+
+        if (!loginConfig) {
+          return;
+        }
+
+        window.location.assign(buildLoginUrl(loginConfig).toString());
       });
 
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("ID_TOKEN");
-        document.getElementById("secretContent").style.display = "none";
+      elements.logoutButton.addEventListener("click", () => {
+        localStorage.removeItem(storageKeys.idToken);
+        setAuthenticatedState(false);
       });
     </script>
   </body>
