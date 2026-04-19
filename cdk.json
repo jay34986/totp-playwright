@@ -1,0 +1,6 @@
+{
+  "app": "node --loader ts-node/esm bin/totp-playwright.ts",
+  "context": {
+    "@aws-cdk/core:newStyleStackSynthesis": true
+  }
+}

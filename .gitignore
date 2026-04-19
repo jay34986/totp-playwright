@@ -1,0 +1,13 @@
+.devcontainer/
+.env
+.github/
+.npmrc
+.vscode/
+cdk.out/
+cdk.context.json
+chat_history/
+dist/
+node_modules/
+playwright/.auth/
+playwright-report/
+test-results/
