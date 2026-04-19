@@ -62,23 +62,32 @@ const firstVisible = async (candidates: Locator[]): Promise<Locator> => {
 
 export const fillPasswordAndSubmit = async (page: Page, username: string, password: string) => {
   const usernameInput = await firstVisible([
+    page.getByRole("textbox", { name: /email|username|user name|name@host\.com/i }),
+    page.getByRole("textbox").first(),
     page.getByLabel(/username|user name|email/i),
+    page.locator('input[name="signInName"]'),
     page.locator('input[name="username"]'),
+    page.locator('input[autocomplete="username"]'),
+    page.locator('input[placeholder="name@host.com"]'),
+    page.locator('input[type="text"]'),
     page.locator('input[type="email"]')
   ]);
   await usernameInput.fill(username);
 
   const passwordInput = await firstVisible([
+    page.getByRole("textbox", { name: /password/i }),
     page.getByLabel(/password/i),
     page.locator('input[name="password"]'),
+    page.locator('input[autocomplete="current-password"]'),
     page.locator('input[type="password"]')
   ]);
   await passwordInput.fill(password);
 
   const submitButton = await firstVisible([
-    page.getByRole("button", { name: /sign in|log in|continue/i }),
+    page.getByRole("button", { name: /sign in|log in|continue|submit/i }),
     page.locator('button[type="submit"]'),
-    page.locator('input[type="submit"]')
+    page.locator('input[type="submit"]'),
+    page.locator("button")
   ]);
   await submitButton.click();
 };
@@ -90,6 +99,9 @@ export const fillTotpAndSubmit = async (page: Page, secret: string) => {
     page.getByLabel(/code|otp|verification/i),
     page.locator('input[name="totpCode"]'),
     page.locator('input[name="code"]'),
+    page.locator('input[autocomplete="one-time-code"]'),
+    page.locator('input[inputmode="decimal"]'),
+    page.locator('input[type="tel"]'),
     page.locator('input[inputmode="numeric"]')
   ]);
 
@@ -98,7 +110,8 @@ export const fillTotpAndSubmit = async (page: Page, secret: string) => {
   const verifyButton = await firstVisible([
     page.getByRole("button", { name: /verify|confirm|continue|submit/i }),
     page.locator('button[type="submit"]'),
-    page.locator('input[type="submit"]')
+    page.locator('input[type="submit"]'),
+    page.locator("button")
   ]);
   await verifyButton.click();
 };
