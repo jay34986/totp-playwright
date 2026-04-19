@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TOTP保護ページ</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Noto Sans JP", sans-serif;
+        background: linear-gradient(135deg, #f5f7ff, #e8fff8);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      main {
+        width: min(800px, 92vw);
+        background: #ffffffee;
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(17, 23, 41, 0.12);
+        padding: 28px;
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      .config {
+        margin: 16px 0;
+        padding: 12px;
+        border: 1px solid #d4dae9;
+        border-radius: 12px;
+        background: #f8fbff;
+      }
+
+      button {
+        cursor: pointer;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-size: 16px;
+      }
+
+      #loginBtn {
+        background: #0b5fff;
+        color: #fff;
+      }
+
+      #logoutBtn {
+        background: #121929;
+        color: #fff;
+        margin-left: 8px;
+      }
+
+      #secretContent {
+        margin-top: 20px;
+        padding: 16px;
+        border-radius: 12px;
+        background: #ecfff4;
+        border: 1px solid #9be2b8;
+        display: none;
+      }
+
+      code {
+        background: #f0f3fb;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>CloudFront + Cognito + S3 TOTP検証ページ</h1>
+      <p>
+        このページは Cognito Hosted UI でログイン後、IDトークンが返ると保護コンテンツを表示します。
+      </p>
+
+      <div class="config">
+        <p>以下の 2 つの値をブラウザの localStorage に設定してください。</p>
+        <p><code>COGNITO_DOMAIN</code> / <code>COGNITO_CLIENT_ID</code></p>
+      </div>
+
+      <button id="loginBtn">Cognitoでログイン</button>
+      <button id="logoutBtn">ログアウト</button>
+
+      <section id="secretContent">
+        <h2>認証済みコンテンツ</h2>
+        <p id="status">認証済み: パスワード + TOTPを通過しました。</p>
+      </section>
+    </main>
+
+    <script>
+      const storageKeys = Object.freeze({
+        cognitoDomain: "COGNITO_DOMAIN",
+        cognitoClientId: "COGNITO_CLIENT_ID",
+        idToken: "ID_TOKEN"
+      });
+
+      const elements = {
+        loginButton: document.getElementById("loginBtn"),
+        logoutButton: document.getElementById("logoutBtn"),
+        secretContent: document.getElementById("secretContent")
+      };
+
+      const setAuthenticatedState = (isAuthenticated) => {
+        elements.secretContent.style.display = isAuthenticated ? "block" : "none";
+      };
+
+      const persistIdTokenFromHash = () => {
+        const params = new URLSearchParams(window.location.hash.replace("#", ""));
+        const tokenFromHash = params.get("id_token");
+
+        if (!tokenFromHash) {
+          return;
+        }
+
+        localStorage.setItem(storageKeys.idToken, tokenFromHash);
+
+        const sanitizedUrl = new URL(window.location.href);
+        sanitizedUrl.hash = "";
+        history.replaceState({}, document.title, `${sanitizedUrl.pathname}${sanitizedUrl.search}`);
+      };
+
+      const readLoginConfig = () => {
+        const cognitoDomain = localStorage.getItem(storageKeys.cognitoDomain);
+        const clientId = localStorage.getItem(storageKeys.cognitoClientId);
+
+        if (!cognitoDomain || !clientId) {
+          alert("先にlocalStorageへ COGNITO_DOMAIN と COGNITO_CLIENT_ID を設定してください。");
+          return null;
+        }
+
+        return { cognitoDomain, clientId };
+      };
+
+      const buildLoginUrl = ({ cognitoDomain, clientId }) => {
+        const redirectUri = `${window.location.origin}${window.location.pathname}`;
+        const loginUrl = new URL(`${cognitoDomain}/login`);
+        loginUrl.searchParams.set("response_type", "token");
+        loginUrl.searchParams.set("client_id", clientId);
+        loginUrl.searchParams.set("redirect_uri", redirectUri);
+        loginUrl.searchParams.set("scope", "openid email profile");
+        return loginUrl;
+      };
+
+      persistIdTokenFromHash();
+      setAuthenticatedState(Boolean(localStorage.getItem(storageKeys.idToken)));
+
+      elements.loginButton.addEventListener("click", () => {
+        const loginConfig = readLoginConfig();
+
+        if (!loginConfig) {
+          return;
+        }
+
+        window.location.assign(buildLoginUrl(loginConfig).toString());
+      });
+
+      elements.logoutButton.addEventListener("click", () => {
+        localStorage.removeItem(storageKeys.idToken);
+        setAuthenticatedState(false);
+      });
+    </script>
+  </body>
+</html>

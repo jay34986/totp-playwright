@@ -1,0 +1,78 @@
+<mxfile host="65bd71144e">
+    <diagram id="totp-playwright-diagram" name="Page-1">
+        <mxGraphModel dx="2269" dy="802" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1280" pageHeight="760" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="bg" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=none;fillColor=#FFFFFF;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
+                    <mxGeometry x="-210" y="10" width="730" height="540" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="ローカル開発環境" style="fillColor=none;strokeColor=#5A6C86;dashed=1;verticalAlign=top;fontStyle=0;fontColor=#5A6C86;whiteSpace=wrap;html=1;labelBackgroundColor=default;" parent="1" vertex="1">
+                    <mxGeometry x="-200" y="20" width="260" height="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="aws-cloud" value="AWS Cloud" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=#FFFFFF;verticalAlign=top;align=left;spacingLeft=30;fontSize=12;fontStyle=1;html=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;container=0;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="20" width="430" height="520" as="geometry"/>
+                </mxCell>
+                <mxCell id="region" value="ap-northeast-1 (Tokyo)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#147EBA;fillColor=#E6F2F8;verticalAlign=top;align=left;spacingLeft=30;fontSize=12;fontStyle=1;html=1;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="70" width="380" height="460" as="geometry"/>
+                </mxCell>
+                <mxCell id="cf-icon" value="CloudFront" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;aspect=fixed;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="296" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge-2" value="ログインへリダイレクト" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;html=1;rounded=0;strokeWidth=2;strokeColor=#545B64;fontSize=12;verticalAlign=bottom;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="cf-icon" edge="1">
+                    <mxGeometry x="-0.2562" y="1" relative="1" as="geometry">
+                        <mxPoint x="240" y="331" as="sourcePoint"/>
+                        <mxPoint x="410" y="260" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="edge-3" value="認証後リダイレクト" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;html=1;rounded=0;strokeWidth=2;dashed=1;dashPattern=8 8;strokeColor=#545B64;fontSize=12;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="9" target="cf-icon" edge="1">
+                    <mxGeometry x="-0.2222" y="-10" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="170" y="193"/>
+                        </Array>
+                        <mxPoint x="390" y="200" as="sourcePoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="edge-4" value="OAC" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;html=1;rounded=0;strokeWidth=2;strokeColor=#545B64;fontSize=12;exitX=1;exitY=0.75;exitDx=0;exitDy=0;exitPerimeter=0;verticalAlign=top;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" source="cf-icon" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="410" y="420" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="edge-6" value="UI操作 (Playwright)" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;html=1;rounded=0;strokeWidth=2;strokeColor=#000000;fontSize=12;fontColor=#147EBA;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="cf-icon" edge="1">
+                    <mxGeometry x="0.1411" y="-14" relative="1" as="geometry">
+                        <mxPoint x="-70" y="260" as="sourcePoint"/>
+                        <mxPoint x="200" y="330" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="-70" y="316"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="edge-7" value="" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;html=1;rounded=0;strokeWidth=2;strokeColor=#545B64;fontSize=12;verticalAlign=top;" parent="1" target="6" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="-70" y="130" as="sourcePoint"/>
+                        <mxPoint x="-70" y="550" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="4" value=".env&lt;div&gt;(TEST_PASSWORD / TOTP_SECRET)&lt;/div&gt;" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.client;" parent="1" vertex="1">
+                    <mxGeometry x="-90" y="50" width="40" height="38.97" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="GitHub Copilot&lt;div&gt;(Playwright + otplib)&lt;/div&gt;" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
+                    <mxGeometry x="-90" y="173" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="internet-icon" value="インターネット" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;pointerEvents=1;shape=mxgraph.aws4.globe;aspect=fixed;labelBackgroundColor=default;" parent="1" vertex="1">
+                    <mxGeometry x="-90" y="296" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Cognito Hosted UI&lt;div&gt;(Password + TOTP)&lt;/div&gt;" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cognito;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="173" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="S3&lt;div&gt;(静的コンテンツ)&lt;/div&gt;" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" parent="1" vertex="1">
+                    <mxGeometry x="390" y="420" width="40" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
